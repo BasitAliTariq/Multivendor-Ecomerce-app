@@ -3,7 +3,7 @@ import Header from "../components/Layout/Header";
 import { useSelector } from "react-redux";
 import socketIO from "socket.io-client";
 import { format } from "timeago.js";
-import { backend_url, server } from "../server";
+import { server } from "../server";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import {
@@ -297,7 +297,7 @@ const MessageList = ({
       <div className="relative">
         <img
           // src={`${userData?.avatar?.url}`}
-          src={`${backend_url}/${userData?.avatar}`}
+          src={userData?.avatar}
           alt=""
           className="w-[50px] h-[50px] rounded-full"
         />
@@ -344,7 +344,7 @@ const SellerInbox = ({
         <div className="flex">
           <img
             // src={`${userData?.avatar?.url}`}
-            src={`${backend_url}/${userData?.avatar}`}
+            src={userData?.avatar}
             alt=""
             className="w-[60px] h-[60px] rounded-full"
           />
@@ -420,8 +420,7 @@ const ShowMessagesArea = ({ messages, userId, userData }) => {
           >
             {userId !== item.sender && (
               <img
-                // src={`${backend_url}/${userData?.avatar}`}
-                src={`${backend_url}/${userData?.avatar}`}
+                src={userData?.avatar}
                 className="rounded-full w-10 h-10 mr-3"
               />
             )}

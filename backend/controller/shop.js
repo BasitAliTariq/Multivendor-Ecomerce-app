@@ -1,9 +1,8 @@
 const express = require("express");
-const path = require("path");
 const { upload } = require("../multer");
 const ErrorHandler = require("../utils/ErrorHandler");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
-const fs = require("fs");
+const { cloudinary, getPublicIdFromUrl } = require("../utils/cloudinary");
 const jwt = require("jsonwebtoken");
 const sendMail = require("../utils/sendMail");
 const sendToken = require("../utils/jwtToken");
@@ -20,23 +19,20 @@ router.post("/create-shop", upload.single("file"), async (req, res, next) => {
     const { email } = req.body;
     const sellerEmail = await Shop.findOne({ email });
     if (sellerEmail) {
-      const filename = req.file.filename;
-      const filePath = `uploads/${filename}`;
-      fs.unlink(filePath, (err) => {
-        if (err) {
-          console.log(err);
-          res.status(500).json({ message: "Error deleting file" });
+      if (req.file && req.file.filename) {
+        try {
+          await cloudinary.uploader.destroy(req.file.filename);
+        } catch (error) {
+          console.log("Cloudinary cleanup failed:", error.message || error);
         }
-      });
+      }
       return next(new ErrorHandler("Seller already exist", 400));
     }
-    const filename = req.file.filename;
-    const fileUrl = path.join(filename);
     const seller = {
       name: req.body.name,
       email: email,
       password: req.body.password,
-      avatar: fileUrl,
+      avatar: req.file.path,
       address: req.body.address,
       phoneNumber: req.body.phoneNumber,
       zipCode: req.body.zipCode,
@@ -201,18 +197,20 @@ router.put(
         return next(new ErrorHandler("User does not exists", 400));
       }
 
-      const existAvatarPath = `uploads/${existsSeller.avatar}`;
-
-      if (fs.existsSync(existAvatarPath)) {
-        fs.unlinkSync(existAvatarPath); // ✅ deletes synchronously and safely
+      const publicId = getPublicIdFromUrl(existsSeller.avatar);
+      if (publicId) {
+        try {
+          await cloudinary.uploader.destroy(publicId);
+        } catch (error) {
+          console.log("Cloudinary cleanup failed:", error.message || error);
+        }
       }
 
       // console.log(req.seller);
 
-      const fileUrl = req.file.filename;
       const seller = await Shop.findByIdAndUpdate(
         req.seller._id,
-        { avatar: fileUrl },
+        { avatar: req.file.path },
         { new: true },
       );
 

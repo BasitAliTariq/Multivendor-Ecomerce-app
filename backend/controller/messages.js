@@ -15,7 +15,7 @@ router.post(
 
       // Check if files exist
       if (req.files && req.files.length > 0) {
-        imageUrls = req.files.map((file) => file.filename);
+        imageUrls = req.files.map((file) => file.path);
       }
 
       // Build message data (single place)

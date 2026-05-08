@@ -295,7 +295,7 @@ import {
   AiOutlineMessage,
   AiOutlineShoppingCart,
 } from "react-icons/ai";
-import { backend_url, server } from "../../server";
+import { server } from "../../server";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllPrroductShop } from "../../redux/actions/product";
 import {
@@ -414,11 +414,7 @@ function ProductDetails({ data }) {
           <div className="block w-full md:flex">
             {/* LEFT SIDE */}
             <div className="w-full md:w-[50%]">
-              <img
-                src={`${backend_url}/${data?.images?.[select]}`}
-                alt=""
-                className="w-[80%]"
-              />
+              <img src={data?.images?.[select]} alt="" className="w-[80%]" />
 
               <div className="w-full flex gap-2 mt-3">
                 {data?.images?.map((img, index) => (
@@ -429,7 +425,7 @@ function ProductDetails({ data }) {
                     }`}
                   >
                     <img
-                      src={`${backend_url}/${img}`}
+                      src={img}
                       alt=""
                       className="h-[120px]"
                       onClick={() => setSelect(index)}
@@ -513,7 +509,7 @@ function ProductDetails({ data }) {
               <div className="flex items-center pt-8">
                 <Link to={`/shop/preview/${data?.shop._id}`}>
                   <img
-                    src={`${backend_url}/${data?.shop?.avatar}`}
+                    src={data?.shop?.avatar}
                     alt=""
                     className="w-[50px] h-[50px] rounded-full mr-2"
                   />
@@ -591,7 +587,7 @@ const ProductDetailsInfo = ({
               ? data.reviews.map((item, index) => (
                   <div className="w-full flex my-2" key={index}>
                     <img
-                      src={`${backend_url}/${item.user.avatar}`}
+                      src={item.user.avatar}
                       alt=""
                       className="w-[50px] h-[50px] rounded-full"
                     />
@@ -621,7 +617,7 @@ const ProductDetailsInfo = ({
             <Link to={`/shop/preview/${data.shop._id}`}>
               <div className="flex items-center">
                 <img
-                  src={`${backend_url}/${data?.shop?.avatar}`}
+                  src={data?.shop?.avatar}
                   alt=""
                   className="w-[50px] h-[50px] rounded-full"
                 />

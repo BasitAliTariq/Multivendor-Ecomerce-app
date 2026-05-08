@@ -10,7 +10,6 @@ import {
   AiOutlineShoppingCart,
   AiOutlineStar,
 } from "react-icons/ai";
-import { backend_url } from "../../../server.js";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addToWishlistFunc,
@@ -74,7 +73,7 @@ function ProductCard({ data, isEvent }) {
           <img
             // src={data.image_Url[0]?.url}
             // src={`${data.images[0]?.url}`}
-            src={`${backend_url}/${data?.images?.[0]}`}
+            src={data?.images?.[0]}
             alt="image"
             className="w-full h-[170px] object-cover rounded-sm"
           />

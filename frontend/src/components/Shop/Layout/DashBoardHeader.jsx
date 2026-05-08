@@ -5,11 +5,9 @@ import { AiOutlineGift } from "react-icons/ai";
 import { MdOutlineLocalOffer } from "react-icons/md";
 import { FiPackage, FiShoppingBag } from "react-icons/fi";
 import { BiMessageSquareDetail } from "react-icons/bi";
-import { backend_url } from "../../../server";
 
 function DashBoardHeader() {
   const { seller } = useSelector((state) => state.seller);
-  // console.log(`${backend_url}${seller.avatar}`);
   return (
     <div className="w-full h-20 bg-white top-0 lef-0 z-30 flex items-center justify-between px-4">
       <div>
@@ -55,7 +53,7 @@ function DashBoardHeader() {
           </Link>
           <Link to={`/shop/${seller._id}`}>
             <img
-              src={`${backend_url}${seller.avatar}`}
+              src={seller.avatar}
               alt=""
               className="w-[50px] h-[50px] rounded-full object-cover"
             />

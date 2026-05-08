@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { backend_url, server } from "../../server";
+import { server } from "../../server";
 import { AiOutlineCamera } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "../../styles/styles";
@@ -74,11 +74,7 @@ const ShopSettings = () => {
         <div className="w-full flex items-center justify-center">
           <div className="relative">
             <img
-              src={
-                avatar
-                  ? URL.createObjectURL(avatar)
-                  : `${backend_url}/${seller.avatar}`
-              }
+              src={avatar ? URL.createObjectURL(avatar) : seller.avatar}
               alt=""
               className="w-[200px] h-[200px] rounded-full"
             />

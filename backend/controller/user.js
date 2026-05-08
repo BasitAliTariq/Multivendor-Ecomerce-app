@@ -1,10 +1,9 @@
 const express = require("express");
-const path = require("path");
 const User = require("../model/user");
 const { upload } = require("../multer");
 const ErrorHandler = require("../utils/ErrorHandler");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
-const fs = require("fs");
+const { cloudinary, getPublicIdFromUrl } = require("../utils/cloudinary");
 const jwt = require("jsonwebtoken");
 const sendMail = require("../utils/sendMail");
 const sendToken = require("../utils/jwtToken");
@@ -16,23 +15,21 @@ router.post("/create-user", upload.single("file"), async (req, res, next) => {
   const { name, email, password } = req.body;
   const userMail = await User.findOne({ email });
   if (userMail) {
-    const filename = req.file.filename;
-    const filePath = `uploads/${filename}`;
-    fs.unlink(filePath, (err) => {
-      if (err) {
-        console.log(err);
-        res.status(500).json({ message: "Error deleting file" });
+    if (req.file && req.file.filename) {
+      try {
+        await cloudinary.uploader.destroy(req.file.filename);
+      } catch (error) {
+        console.log("Cloudinary cleanup failed:", error.message || error);
       }
-    });
+    }
     return next(new ErrorHandler("User already exist", 400));
   }
-  const filename = req.file.filename;
-  const fileUrl = path.join(filename);
+
   const user = {
     name: name,
     email: email,
     password: password,
-    avatar: fileUrl,
+    avatar: req.file.path,
   };
   const activationToken = createActivationToken(user);
   const activationUrl = `http://localhost:5173/activation/${activationToken}`;
@@ -199,17 +196,18 @@ router.put(
       if (!existUser) {
         return next(new ErrorHandler("User not found!", 400));
       }
-      if (existUser.avatar) {
-        const existAvatarPath = `uploads/${existUser.avatar}`;
 
-        if (fs.existsSync(existAvatarPath)) {
-          fs.unlinkSync(existAvatarPath);
+      const publicId = getPublicIdFromUrl(existUser.avatar);
+      if (publicId) {
+        try {
+          await cloudinary.uploader.destroy(publicId);
+        } catch (error) {
+          console.log("Cloudinary cleanup failed:", error.message || error);
         }
       }
 
-      const fileUrl = path.join(req.file.filename);
       const user = await User.findByIdAndUpdate(req.user.id, {
-        avatar: fileUrl,
+        avatar: req.file.path,
       });
       res.status(200).json({
         success: true,

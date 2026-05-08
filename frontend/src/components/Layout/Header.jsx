@@ -13,7 +13,6 @@ import { BiMenuAltLeft } from "react-icons/bi";
 import DropDown from "./DropDown.jsx";
 import Navbar from "./Navbar.jsx";
 import { useSelector } from "react-redux";
-import { backend_url } from "../../server.js";
 import Cart from "../Cart/Cart.jsx";
 import WishList from "../WishList/WishList.jsx";
 import { RxCross1 } from "react-icons/rx";
@@ -84,7 +83,7 @@ function Header({ activeHeaduing }) {
                       <Link to={`/product/${i._id}`} key={i._id}>
                         <div className="w-full flex items-start py-3">
                           <img
-                            src={`${backend_url}/${i.images[0]}`}
+                            src={i.images?.[0]}
                             alt="product pic"
                             className="w-[45px] h-[45px] mr-2.5 "
                           />
@@ -177,7 +176,7 @@ function Header({ activeHeaduing }) {
                   <Link to="/profile">
                     {
                       <img
-                        src={`${backend_url}${user.avatar}`}
+                        src={user.avatar}
                         alt=""
                         className="w-10 h-10 rounded-full"
                       />
@@ -316,7 +315,7 @@ function Header({ activeHeaduing }) {
                     <Link to="/profile">
                       {
                         <img
-                          src={`${backend_url}${user.avatar}`}
+                          src={user.avatar}
                           alt=""
                           className="w-[60px] h-[60px] rounded-full"
                         />

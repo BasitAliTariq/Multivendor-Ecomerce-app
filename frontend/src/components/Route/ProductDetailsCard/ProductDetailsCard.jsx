@@ -7,7 +7,6 @@ import {
   AiOutlineHeart,
   AiOutlineShoppingCart,
 } from "react-icons/ai";
-import { backend_url } from "../../../server";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -82,16 +81,13 @@ function ProductDetailsCard({ setOpen, data }) {
             <div className="block w-full md:flex">
               {/* Left side */}
               <div className="w-full md:w-[50%]">
-                <img
-                  src={`${backend_url}/${data?.images?.[0]}`}
-                  alt="product_image"
-                />
+                <img src={data?.images?.[0]} alt="product_image" />
                 <Link
                   to={`/shop/preview/${data.shop._id}`}
                   className="flex items-center mt-4 w-full bg-gray-50 p-3 rounded-xl hover:shadow transition"
                 >
                   <img
-                    src={`${backend_url}/${data?.shop?.avatar}`}
+                    src={data?.shop?.avatar}
                     alt="shop_imaage"
                     className="w-[50px] h-[50px] rounded-full mr-2"
                   />

@@ -7,7 +7,6 @@ import { data, Link } from "react-router-dom";
 import { AiOutlineHeart } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { removeFromWishlistFun } from "../../redux/actions/wishlist";
-import { backend_url } from "../../server";
 import { addToCartFunc } from "../../redux/actions/cart";
 import { toast } from "react-toastify";
 
@@ -88,7 +87,7 @@ const CartSingle = ({ data, removeWishlistHandler, addToCartHandler }) => {
           onClick={() => removeWishlistHandler(data)}
         />
         <img
-          src={`${backend_url}/${data?.images[0]}`}
+          src={data?.images?.[0]}
           className="w-[130px] h-min ml-2 mr-2 rounded-[5px]"
           alt=""
         />
