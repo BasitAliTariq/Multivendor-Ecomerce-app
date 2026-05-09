@@ -531,6 +531,83 @@
 //     ),
 //   },
 //   {
+
+export const navItems = [
+  {
+    title: "Home",
+    url: "/",
+  },
+  {
+    title: "Best Selling",
+    url: "/best-selling",
+  },
+  {
+    title: "Products",
+    url: "/products",
+  },
+  {
+    title: "Events",
+    url: "/events",
+  },
+  {
+    title: "FAQ",
+    url: "/faq",
+  },
+];
+
+export const categoriesData = [
+  {
+    id: 1,
+    title: "Computers and Laptops",
+    subTitle: "",
+    image_Url:
+      "https://cdn.shopify.com/s/files/1/1706/9177/products/NEWAppleMacbookProwithM1ProChip14InchLaptop2021ModelMKGQ3LL_A_16GB_1TBSSD_custommacbd.jpg?v=1659592838",
+  },
+  {
+    id: 2,
+    title: "Cosmetics and Body Care",
+    subTitle: "",
+    image_Url:
+      "https://indian-retailer.s3.ap-south-1.amazonaws.com/s3fs-public/2021-07/kosme1.png",
+  },
+  {
+    id: 3,
+    title: "Accessories",
+    subTitle: "",
+    image_Url:
+      "https://img.freepik.com/free-vector/ordering-goods-online-internet-store-online-shopping-niche-e-commerce-website-mother-buying-babies-clothes-footwear-toys-infant-accessories_335657-2345.jpg?w=2000",
+  },
+  {
+    id: 4,
+    title: "Clothes",
+    subTitle: "",
+    image_Url:
+      "https://www.shift4shop.com/2015/images/industries/clothing/clothing-apparel.png",
+  },
+];
+
+export const productData = [];
+
+export const brandingData = [
+  {
+    id: 1,
+    title: "Free Shipping",
+    Description: "From all orders over $100",
+    icon: null,
+  },
+  {
+    id: 2,
+    title: "Daily Surprise",
+    Description: "Save up to 25%",
+    icon: null,
+  },
+  {
+    id: 3,
+    title: "Support 24/7",
+    Description: "Shop with an expert",
+    icon: null,
+  },
+];
 //     id: 2,
 //     title: "Daily Surprise Offers",
 //     Description: "Save up to 25% off",
