@@ -3,28 +3,43 @@ const ErrorHandler = require("./middleware/error");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const connectDatabase = require("./db/Database");
 
-const app = express();
-
-app.use(express.json());
-app.use(cookieParser());
-app.use(
-  cors({
-    origin: "http://localhost:5173",
-    credentials: true,
-  }),
-);
-app.use("/", express.static("uploads"));
-app.use(bodyParser.urlencoded({ extended: true }));
+// Handling uncaught Exceptions
+process.on("uncaughtException", (err) => {
+  console.log(`Error: ${err.message}`);
+  console.log("Shutting down the server for handling uncaught exception");
+});
 
 // config
-if (process.env.NODE_ENV !== "PRODUCTION") {
+if (process.env.NODE_ENV !== "production") {
   require("dotenv").config({
     path: "./config/.env",
   });
 }
-// import routes
 
+// connect database
+connectDatabase();
+
+const app = express();
+
+// middleware
+app.use(express.json());
+app.use(cookieParser());
+
+const isProd = process.env.NODE_ENV === "production";
+
+app.use(
+  cors({
+    origin: isProd ? process.env.FRONTEND_URL : "http://localhost:5173",
+    credentials: true,
+  }),
+);
+
+app.use("/", express.static("uploads"));
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// import routes
 const user = require("./controller/user");
 const shop = require("./controller/shop");
 const product = require("./controller/product");
@@ -34,6 +49,8 @@ const payment = require("./controller/payment");
 const order = require("./controller/order");
 const conversation = require("./controller/conversation");
 const messages = require("./controller/messages");
+
+// routes
 app.use("/api/v2/user", user);
 app.use("/api/v2/shop", shop);
 app.use("/api/v2/product", product);
@@ -43,6 +60,14 @@ app.use("/api/v2/payment", payment);
 app.use("/api/v2/order", order);
 app.use("/api/v2/conversation", conversation);
 app.use("/api/v2/message", messages);
-//It is for error handling
+
+// error handling middleware
 app.use(ErrorHandler);
+
+// Unhandled promise rejection
+process.on("unhandledRejection", (err) => {
+  console.log(`Error: ${err.message}`);
+  console.log("Shutting down for unhandled promise rejection");
+});
+
 module.exports = app;
