@@ -12,6 +12,7 @@ const { isSeller } = require("../middleware/auth");
 const { error } = require("console");
 const sendShopToken = require("../utils/shopToken");
 const router = express.Router();
+const isProd = process.env.NODE_ENV === "production";
 
 // create shop
 router.post("/create-shop", upload.single("file"), async (req, res, next) => {
@@ -154,8 +155,11 @@ router.get(
   catchAsyncErrors(async (req, res, next) => {
     try {
       res.cookie("seller_token", null, {
-        expires: new Date(Date.now()),
+        expires: new Date(0),
         httpOnly: true,
+        sameSite: isProd ? "none" : "lax",
+        secure: isProd,
+        path: "/",
       });
       res.status(201).json({
         success: true,

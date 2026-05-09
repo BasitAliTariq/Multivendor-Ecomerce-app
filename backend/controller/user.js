@@ -10,6 +10,7 @@ const sendToken = require("../utils/jwtToken");
 const { isAuthenticated } = require("../middleware/auth");
 const user = require("../model/user");
 const router = express.Router();
+const isProd = process.env.NODE_ENV === "production";
 
 router.post("/create-user", upload.single("file"), async (req, res, next) => {
   const { name, email, password } = req.body;
@@ -140,8 +141,11 @@ router.get(
   catchAsyncErrors(async (req, res, next) => {
     try {
       res.cookie("token", null, {
-        expires: new Date(Date.now()),
+        expires: new Date(0),
         httpOnly: true,
+        sameSite: isProd ? "none" : "lax",
+        secure: isProd,
+        path: "/",
       });
       res.status(201).json({
         success: true,
