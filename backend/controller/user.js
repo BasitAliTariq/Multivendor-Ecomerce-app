@@ -11,6 +11,8 @@ const { isAuthenticated } = require("../middleware/auth");
 const user = require("../model/user");
 const router = express.Router();
 const isProd = process.env.NODE_ENV === "production";
+const frontendUrl =
+  "https://multivendor-ecomerce-app-x299.vercel.app" || "http://localhost:5173";
 
 router.post("/create-user", upload.single("file"), async (req, res, next) => {
   const { name, email, password } = req.body;
@@ -33,7 +35,7 @@ router.post("/create-user", upload.single("file"), async (req, res, next) => {
     avatar: req.file.path,
   };
   const activationToken = createActivationToken(user);
-  const activationUrl = `http://localhost:5173/activation/${activationToken}`;
+  const activationUrl = `${frontendUrl}/activation/${activationToken}`;
   try {
     await sendMail({
       email: user.email,

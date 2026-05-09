@@ -13,6 +13,8 @@ const { error } = require("console");
 const sendShopToken = require("../utils/shopToken");
 const router = express.Router();
 const isProd = process.env.NODE_ENV === "production";
+const frontendUrl =
+  "https://multivendor-ecomerce-app-x299.vercel.app" || "http://localhost:5173";
 
 // create shop
 router.post("/create-shop", upload.single("file"), async (req, res, next) => {
@@ -40,7 +42,7 @@ router.post("/create-shop", upload.single("file"), async (req, res, next) => {
     };
 
     const activationToken = createActivationToken(seller);
-    const activationUrl = `http://localhost:5173/seller/activation/${activationToken}`;
+    const activationUrl = `${frontendUrl}/seller/activation/${activationToken}`;
     try {
       await sendMail({
         email: seller.email,
