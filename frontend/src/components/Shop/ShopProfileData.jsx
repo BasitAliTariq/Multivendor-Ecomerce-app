@@ -83,7 +83,7 @@ import { Link, useParams } from "react-router-dom";
 import styles from "../../styles/styles";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllPrroductShop } from "../../redux/actions/product";
-import Ratings from "../products/Ratings";
+import Ratings from "../Products/Ratings";
 import { getAllEventsShop } from "../../redux/actions/event";
 
 const ShopProfileData = ({ isOwner }) => {
