@@ -24,22 +24,37 @@ connectDatabase();
 const app = express();
 
 // middleware
-app.use(express.json());
+app.use(express.json({ limit: "10mb" }));
 app.use(cookieParser());
 
 const isProd = process.env.NODE_ENV === "production";
+const defaultOrigins = isProd
+  ? [
+      "https://multivendor-ecomerce-app-x299.vercel.app",
+      "https://multivendor-ecomerce-app.vercel.app",
+    ]
+  : ["http://localhost:5173"];
+const allowedOrigins = process.env.CORS_ORIGINS
+  ? process.env.CORS_ORIGINS.split(",").map((origin) => origin.trim())
+  : defaultOrigins;
 
 app.use(
   cors({
-    origin: isProd
-      ? "https://multivendor-ecomerce-app-x299.vercel.app"
-      : "http://localhost:5173",
+    origin: (origin, callback) => {
+      if (!origin) {
+        return callback(null, true);
+      }
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      return callback(new Error("Not allowed by CORS"));
+    },
     credentials: true,
   }),
 );
 
 app.use("/", express.static("uploads"));
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true, limit: "10mb" }));
 
 // import routes
 const user = require("./controller/user");
